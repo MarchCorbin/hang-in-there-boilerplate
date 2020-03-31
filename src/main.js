@@ -119,6 +119,7 @@ var quotes = [
 var savedPostersArray = []
 
 
+
 document.onload = randomPoster()
 // event listeners go here 👇
 showForm.addEventListener("click",showFormPage)
@@ -190,16 +191,27 @@ function createPoster(){
   posterImageUrl.value = posterTitleInput.value = posterQuoteInput.value = ''
   displayPoster(userUrl, userTitle, userQuote)
 }
-function savePoster(){
+
+function savePoster(poster){
   var userUrl = posterImg.src
   var userTitle = posterTitle.innerText
   var userQuote = posterQuote.innerText
-  images.push(userUrl)
-  titles.push(userTitle)
-  quotes.push(userQuote)
-  var newPoster = new Poster(userUrl, userTitle, userQuote)
-  savedPostersArray.push(newPoster)
-}
+  var currentPoster = new Poster(userUrl, userTitle, userQuote)
+  if(!savedPostersArray.length){
+    savedPostersArray.push(currentPoster)
+  } else {
+    if(isUniquePoster(currentPoster)){
+      savedPostersArray.push(currentPoster)
+      images.push(currentPoster.imageURL)
+      titles.push(currentPoster.title)
+      quotes.push(currentPoster.quote)
+    }
+
+  }
+
+  }
+
+
 function displaySaved(){
   for (var i = 0; i<savedPostersArray.length; i++){
     var currentPoster = savedPostersArray[i]
@@ -212,4 +224,12 @@ function displaySaved(){
     `
     savedPostersGrid.insertAdjacentHTML('afterbegin', posterHTML)
   }
+}
+function isUniquePoster(currentPoster){
+  for (var i = 0; i < savedPostersArray.length; i++) {
+   if((currentPoster.title == savedPostersArray[i].title) && (currentPoster.quote == savedPostersArray[i].quote) && (currentPoster.imageURL == savedPostersArray[i].imageURL)){
+     return false
+   }
+  }
+  return true
 }
