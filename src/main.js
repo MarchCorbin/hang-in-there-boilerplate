@@ -1,4 +1,3 @@
-// query selector variables go here 👇
 var posterImg = document.querySelector('.poster-img')
 var posterTitle = document.querySelector('.poster-title')
 var posterQuote = document.querySelector('.poster-quote')
@@ -10,17 +9,15 @@ var savedPosters = document.querySelector('.saved-posters')
 var backToMain = document.querySelector('.back-to-main')
 var showMain = document.querySelector('.show-main')
 var showRandom = document.querySelector('.show-random')
-var posterImageUrl = document.querySelector('#poster-image-url')
-var posterTitleInput = document.querySelector('#poster-title')
-var posterQuoteInput = document.querySelector('#poster-quote')
-var makePosterButton = document.querySelector('#make-poster-button2')
 var miniCardsBtn = document.querySelector('.mini-cards-btn')
 var miniPoster = document.querySelector('.mini-poster')
 var savedPostersGrid = document.querySelector('.saved-posters-grid')
 var savePosterBtn = document.querySelector('.save-poster')
+var posterImageUrl = document.querySelector('#poster-image-url')
+var posterTitleInput = document.querySelector('#poster-title')
+var posterQuoteInput = document.querySelector('#poster-quote')
+var makePosterButton = document.querySelector('#make-poster-button2')
 
-
-// we've provided you with some data to work with 👇
 var images = [
   "./assets/bees.jpg",
   "./assets/bridge.jpg",
@@ -120,129 +117,111 @@ var quotes = [
 ];
 var savedPostersArray = []
 
-
-
 document.onload = randomPoster()
-// event listeners go here 👇
 showForm.addEventListener("click",showFormPage)
 showSaved.addEventListener("click",function(){
   showSavedPage()
   displaySaved()
 })
+
 backToMain.addEventListener("click",backToMainPage)
 showMain.addEventListener("click",showMainPage)
-showRandom.addEventListener("click",showRandomPage)
+showRandom.addEventListener("click",randomPoster)
 makePosterButton.addEventListener("click",createPoster)
 savePosterBtn.addEventListener("click", savePoster)
 savedPostersGrid.addEventListener("dblclick", removePosterFromSaved)
-// functions and event handlers go here 👇
-// (we've provided one for you to get you started)!
-function getRandomIndex(array) {
-  return Math.floor(Math.random() * array.length);
-}
 
-function randomImg(){
-  var img = getRandomIndex(images)
-  posterImg.src = images[img]
+  function getRandomIndex(array) {
+    return Math.floor(Math.random() * array.length);
   }
 
-  function randomTitle(){
+  function randomPoster(){
+    var img = getRandomIndex(images)
     var selectedTitle = getRandomIndex(titles)
-    posterTitle.innerText = titles[selectedTitle]
-  }
-
-  function randomQuote(){
     var selectedQuote = getRandomIndex(quotes)
+    posterImg.src = images[img]
+    posterTitle.innerText = titles[selectedTitle]
     posterQuote.innerText = quotes[selectedQuote]
   }
-function randomPoster(){
-randomImg();
-randomTitle();
-randomQuote();
-}
-function showFormPage(){
-  mainPoster.classList.add('hidden')
-  posterForm.classList.remove('hidden')
-}
-function showSavedPage(){
-  mainPoster.classList.add('hidden')
-  savedPosters.classList.remove('hidden')
-}
-function backToMainPage(){
-  savedPosters.classList.add('hidden')
-  mainPoster.classList.remove('hidden')
-  savedPostersArray = []
-}
-function showMainPage(){
-  mainPoster.classList.remove('hidden')
-  posterForm.classList.add('hidden')
-}
-function showRandomPage(){
-  randomPoster()
-}
 
-function displayPoster(imageUrl, title, quote){
-  posterImg.src = imageUrl;
-  posterTitle.innerText = title
-  posterQuote.innerText = quote
-  showMainPage()
-}
+  function showFormPage() {
+    mainPoster.classList.add('hidden')
+    posterForm.classList.remove('hidden')
+  }
 
-function createPoster(){
-  var userUrl = posterImageUrl.value
-  var userTitle = posterTitleInput.value
-  var userQuote = posterQuoteInput.value
-  posterImageUrl.value = posterTitleInput.value = posterQuoteInput.value = ''
-  displayPoster(userUrl, userTitle, userQuote)
-}
+  function showSavedPage() {
+    mainPoster.classList.add('hidden')
+    savedPosters.classList.remove('hidden')
+  }
 
-function savePoster(poster){
-  var userUrl = posterImg.src
-  var userTitle = posterTitle.innerText
-  var userQuote = posterQuote.innerText
-  var currentPoster = new Poster(userUrl, userTitle, userQuote)
-  if(!savedPostersArray.length){
-    savedPostersArray.push(currentPoster)
-  } else {
-    if(isUniquePoster(currentPoster)){
+  function backToMainPage() {
+    savedPosters.classList.add('hidden')
+    mainPoster.classList.remove('hidden')
+    savedPostersArray = []
+  }
+
+  function showMainPage() {
+    mainPoster.classList.remove('hidden')
+    posterForm.classList.add('hidden')
+  }
+
+  function displayPoster(imageUrl, title, quote){
+    posterImg.src = imageUrl;
+    posterTitle.innerText = title
+    posterQuote.innerText = quote
+    showMainPage()
+  }
+
+  function createPoster() {
+    var userUrl = posterImageUrl.value
+    var userTitle = posterTitleInput.value
+    var userQuote = posterQuoteInput.value
+    displayPoster(userUrl, userTitle, userQuote)
+    posterImageUrl.value = posterTitleInput.value = posterQuoteInput.value = ''
+  }
+
+  function savePoster(poster) {
+    var userUrl = posterImg.src
+    var userTitle = posterTitle.innerText
+    var userQuote = posterQuote.innerText
+    var currentPoster = new Poster(userUrl, userTitle, userQuote)
+    if (!savedPostersArray.length){
       savedPostersArray.push(currentPoster)
-      images.push(currentPoster.imageURL)
-      titles.push(currentPoster.title)
-      quotes.push(currentPoster.quote)
+    } else {
+        if (isUniquePoster(currentPoster)) {
+          savedPostersArray.push(currentPoster)
+          images.push(currentPoster.imageURL)
+          titles.push(currentPoster.title)
+          quotes.push(currentPoster.quote)
+          }
+        }
       }
+
+  function displaySaved() {
+    for (var i = 0; i<savedPostersArray.length; i++){
+      var currentPoster = savedPostersArray[i]
+      var posterHTML = `
+        <div class= "mini-poster" id='${currentPoster.id}'>
+          <img class="card-img" src="${currentPoster.imageURL}" alt="nothin' to see here">
+          <h1 class="card-title">${currentPoster.title}</h1>
+          <h3 class="card-quote">${currentPoster.quote}</h3>
+        </div>
+      `
+      savedPostersGrid.insertAdjacentHTML('afterbegin', posterHTML)
     }
   }
 
-
-function displaySaved(){
-  for (var i = 0; i<savedPostersArray.length; i++){
-    var currentPoster = savedPostersArray[i]
-    var posterHTML = `
-      <div class= "mini-poster" id='${currentPoster.id}'>
-        <img class="card-img" src="${currentPoster.imageURL}" alt="nothin' to see here">
-        <h1 class="card-title">${currentPoster.title}</h1>
-        <h3 class="card-quote">${currentPoster.quote}</h3>
-      </div>
-    `
-    savedPostersGrid.insertAdjacentHTML('afterbegin', posterHTML)
-  }
-}
-  function isUniquePoster(currentPoster){
+  function isUniquePoster(currentPoster) {
     for (var i = 0; i < savedPostersArray.length; i++) {
-     if((currentPoster.title == savedPostersArray[i].title) && (currentPoster.quote == savedPostersArray[i].quote) && (currentPoster.imageURL == savedPostersArray[i].imageURL)){
+     if ((currentPoster.title == savedPostersArray[i].title) && (currentPoster.quote == savedPostersArray[i].quote) && (currentPoster.imageURL == savedPostersArray[i].imageURL)){
        return false
-   }
-  }
-  return true
-}
-function removePosterFromSaved(currentPoster){
-  for (var i = 0; i < savedPostersArray.length; i++) {
-
-  // console.log(savedPostersArray[i].id)
-  var selectedPoster = event.target.parentNode.id;
-  var selectedCard = document.getElementById(`${selectedPoster}`)
-  selectedCard.classList.add('hidden')
-
+     }
+    }
+    return true
   }
 
-}
+  function removePosterFromSaved() {
+    var selectedPoster = event.target.parentNode.id;
+    var selectedCard = document.getElementById(`${selectedPoster}`)
+    selectedCard.classList.add('hidden')
+  }
