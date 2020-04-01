@@ -146,7 +146,7 @@ button:hover {
   text-transform: uppercase;
 }
 .card-img {
-  border: 2px solid white; 
+  border: 2px solid white;
 }
 .card-title , .card-quote{
   color: white;
@@ -154,6 +154,7 @@ button:hover {
   width: 90%;
   letter-spacing: 5px;
   margin-bottom: 10px;
+  text-transform: uppercase;
 
 
 }
@@ -167,5 +168,18 @@ button:hover {
 }
 .card-title {
   font-size: 20px;
+}
+.mini-cards-btn {
+  /* border: none;
+  outline: none;
+  pointer-events: none; */
+}
 
+
+.dissapear-card {
+  background: white!important;
+  color: white;
+  height: 340px;
+  padding: 25px;
+  width: 425px;
 }
