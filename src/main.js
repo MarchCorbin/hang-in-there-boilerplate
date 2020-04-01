@@ -14,6 +14,8 @@ var posterImageUrl = document.querySelector('#poster-image-url')
 var posterTitleInput = document.querySelector('#poster-title')
 var posterQuoteInput = document.querySelector('#poster-quote')
 var makePosterButton = document.querySelector('#make-poster-button2')
+var miniCardsBtn = document.querySelector('.mini-cards-btn')
+var miniPoster = document.querySelector('.mini-poster')
 var savedPostersGrid = document.querySelector('.saved-posters-grid')
 var savePosterBtn = document.querySelector('.save-poster')
 
@@ -132,6 +134,7 @@ showMain.addEventListener("click",showMainPage)
 showRandom.addEventListener("click",showRandomPage)
 makePosterButton.addEventListener("click",createPoster)
 savePosterBtn.addEventListener("click", savePoster)
+savedPostersGrid.addEventListener("dblclick", removePosterFromSaved)
 // functions and event handlers go here 👇
 // (we've provided one for you to get you started)!
 function getRandomIndex(array) {
@@ -168,6 +171,7 @@ function showSavedPage(){
 function backToMainPage(){
   savedPosters.classList.add('hidden')
   mainPoster.classList.remove('hidden')
+  savedPostersArray = []
 }
 function showMainPage(){
   mainPoster.classList.remove('hidden')
@@ -205,10 +209,8 @@ function savePoster(poster){
       images.push(currentPoster.imageURL)
       titles.push(currentPoster.title)
       quotes.push(currentPoster.quote)
+      }
     }
-
-  }
-
   }
 
 
@@ -225,11 +227,22 @@ function displaySaved(){
     savedPostersGrid.insertAdjacentHTML('afterbegin', posterHTML)
   }
 }
-function isUniquePoster(currentPoster){
-  for (var i = 0; i < savedPostersArray.length; i++) {
-   if((currentPoster.title == savedPostersArray[i].title) && (currentPoster.quote == savedPostersArray[i].quote) && (currentPoster.imageURL == savedPostersArray[i].imageURL)){
-     return false
+  function isUniquePoster(currentPoster){
+    for (var i = 0; i < savedPostersArray.length; i++) {
+     if((currentPoster.title == savedPostersArray[i].title) && (currentPoster.quote == savedPostersArray[i].quote) && (currentPoster.imageURL == savedPostersArray[i].imageURL)){
+       return false
    }
   }
   return true
+}
+function removePosterFromSaved(currentPoster){
+  for (var i = 0; i < savedPostersArray.length; i++) {
+
+  // console.log(savedPostersArray[i].id)
+  var selectedPoster = event.target.parentNode.id;
+  var selectedCard = document.getElementById(`${selectedPoster}`)
+  selectedCard.classList.add('hidden')
+
+  }
+
 }
